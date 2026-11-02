@@ -47,7 +47,7 @@ test("passwords are stored as bcrypt hashes, never plain text", async () => {
 // ---------- constraints ----------
 test("UNIQUE: username already exists", () =>
   rejects(`INSERT INTO app_user (username, password_hash, app_role)
-           VALUES ('audit_meera', 'x', 'AUDITOR')`, "app_user_username_key"));
+           VALUES ('audit_shriram', 'x', 'AUDITOR')`, "app_user_username_key"));
 
 test("CHECK: IATA code must be three capital letters", () =>
   rejects(`INSERT INTO airport VALUES ('bl1', 'Bad', 'X', 'Y', 'UTC')`, "chk_airport_iata_format"));

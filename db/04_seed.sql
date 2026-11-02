@@ -32,13 +32,11 @@ INSERT INTO aircraft_type (type_code, manufacturer, description) VALUES
 ('B788', 'Boeing', 'Boeing 787-8 Dreamliner wide-body');
 
 -- ---------- app_user ----------
--- Every demo account's password is  Crew@123
--- Each hash has its own random salt, so equal passwords give different hashes.
+-- Demo accounts (passwords: Sam@123 and Shriram@123).
+-- Only bcrypt hashes are stored; each hash includes its own random salt.
 INSERT INTO app_user (user_id, username, password_hash, app_role) VALUES
-(1, 'sched_anita',  '$2b$10$.nAq1dMaAQTmQ7/2AvH/Bu9wwcgBhqIGLPHkXsYG02Y/medFyUvYW', 'SCHEDULER'),
-(2, 'sched_vikram', '$2b$10$I54zlnjrP6vADDNKubRcTO.nlTf/lcaNfvm4ElUe2Tf6DdzqlrINS', 'SCHEDULER'),
-(3, 'audit_meera',  '$2b$10$wvWAErJ9WkBls3C5xzSi7utW9hhPpzHJxAASUcb91asqmhVIWTPR.', 'AUDITOR'),
-(4, 'audit_rahul',  '$2b$10$c1EpAtHi1qsMWWZ7kyCHguv2C4Uir1kQ9eCiUfHzSim3oL4zwQ7Xe', 'AUDITOR');
+(1, 'sched_sam',     '$2b$10$cwu/pvgdqv2C95XdPtGVUuxjRJHuLDi5K0gYnnFfQnQki6lkuBAlC', 'SCHEDULER'),
+(2, 'audit_shriram', '$2b$10$5bokBBUTwKn8PqLJFAEPN.vewwqJNS.MgS2S3b1pQ4p0QtPX2mZzm', 'AUDITOR');
 
 -- ---------- crew_member ----------
 INSERT INTO crew_member (crew_id, employee_code, first_name, last_name, crew_role, home_base, hire_date, is_active) VALUES
@@ -114,7 +112,7 @@ SELECT r.crew_id,
        cm.crew_role,
        f.sched_dep_utc - INTERVAL '1 hour',
        f.sched_arr_utc + INTERVAL '30 minutes' + r.delay,
-       CASE WHEN f.sched_dep_utc < '2026-11-09' THEN 1 ELSE 2 END   -- who rostered it
+       1                                                            -- rostered by sched_sam
 FROM (VALUES
     -- (flight_id, crew_id, extra delay)
     (1, 1, INTERVAL '0'), (1, 3, INTERVAL '0'), (1, 5, INTERVAL '0'),

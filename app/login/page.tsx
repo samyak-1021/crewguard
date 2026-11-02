@@ -48,8 +48,8 @@ export default function LoginPage() {
         </form>
 
         <p className="mt-6 text-center text-xs text-muted">
-          Demo: <span className="font-mono">sched_anita</span> (scheduler) or{" "}
-          <span className="font-mono">audit_meera</span> (auditor), password <span className="font-mono">Crew@123</span>
+          Demo: <span className="font-mono">sched_sam</span> / <span className="font-mono">Sam@123</span> (scheduler) or{" "}
+          <span className="font-mono">audit_shriram</span> / <span className="font-mono">Shriram@123</span> (auditor)
         </p>
       </div>
     </div>
