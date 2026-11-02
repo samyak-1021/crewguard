@@ -19,9 +19,9 @@ export default async function DashboardPage() {
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <Stat label="Total violations" value={stats.total} />
-        <Stat label="Open" value={stats.open} hint="waiting for review" />
-        <Stat label="Resolved" value={stats.resolved} />
-        <Stat label="Validation runs" value={stats.runs} />
+        <Stat label="Open" value={stats.open} hint="waiting for review" tone="red" />
+        <Stat label="Resolved" value={stats.resolved} tone="green" />
+        <Stat label="Validation runs" value={stats.runs} tone="violet" />
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
@@ -57,15 +57,15 @@ export default async function DashboardPage() {
           <Card title="By severity" action={<Source>MongoDB · $group</Source>}>
             <Bars items={mongo.bySeverity.map((s) => ({
               label: String(s._id).toLowerCase(), value: s.count, href: `/violations?severity=${s._id}`,
-            }))} />
+            }))} color="bg-amber-500" />
           </Card>
 
           <Card title="Top 5 crew" action={<Source>MongoDB · $group, $sort, $limit</Source>}>
-            <Bars items={mongo.topCrew.map((c) => ({ label: c.name, value: c.count, href: `/crew/${c._id}` }))} />
+            <Bars items={mongo.topCrew.map((c) => ({ label: c.name, value: c.count, href: `/crew/${c._id}` }))} color="bg-violet-500" />
           </Card>
 
           <Card title="Violations per run" action={<Source>MongoDB · $group</Source>}>
-            <Bars items={mongo.perRun.map((r) => ({ label: `Run #${r._id}`, value: r.count, href: `/runs/${r._id}` }))} />
+            <Bars items={mongo.perRun.map((r) => ({ label: `Run #${r._id}`, value: r.count, href: `/runs/${r._id}` }))} color="bg-emerald-500" />
           </Card>
 
           <Card title="Logged actions per day" action={<Source>MongoDB · $dateToString</Source>}>

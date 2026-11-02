@@ -43,7 +43,7 @@ export function Sidebar({ session }: { session: Session }) {
   }
 
   return (
-    <aside className="sticky top-0 flex h-screen w-60 shrink-0 flex-col border-r border-line bg-panel px-4 py-6">
+    <aside className="sticky top-0 flex h-screen w-60 flex-col px-4 py-6">
       <Link href="/" className="mb-8 flex items-center gap-2.5 px-2">
         <span className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-blue-600 to-violet-600 text-sm font-bold text-white">CG</span>
         <span className="text-[17px] font-semibold tracking-tight">CrewGuard</span>

@@ -87,7 +87,7 @@ export default async function ViolationDetailPage({ params }: PageProps<"/violat
               <Td>{fmtExact(d.contribution_value)}</Td>
             </tr>
           ))}
-          <tr className="bg-zinc-50 font-medium">
+          <tr className="bg-panel font-medium">
             <Td className="text-muted">Total duty hours</Td>
             <Td>{""}</Td>
             <Td>{""}</Td>
