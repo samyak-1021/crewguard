@@ -7,6 +7,11 @@ import { Pool, types, type PoolClient, type QueryResultRow } from "pg";
 types.setTypeParser(types.builtins.NUMERIC, parseFloat);
 types.setTypeParser(types.builtins.INT8, (v) => parseInt(v, 10));
 
+// pg reads a DATE as midnight in the SERVER's time zone, but lib/format.ts shows
+// everything in UTC. On a machine in IST that displays every date one day early.
+// Reading it as midnight UTC keeps the date that is stored in the database.
+types.setTypeParser(types.builtins.DATE, (v) => new Date(`${v}T00:00:00Z`));
+
 // One connection pool per server process. In development Next.js reloads
 // modules on every change, so the pool is kept on globalThis to avoid
 // opening a new pool each time.
