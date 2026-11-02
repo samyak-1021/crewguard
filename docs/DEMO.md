@@ -96,4 +96,5 @@ Every test runs inside `BEGIN ... ROLLBACK`, so the demo data is untouched.
 | Why `RANGE` and not `ROWS` in WDH? | The window is 7 days of time, not 7 rows. |
 | Why `clock_timestamp()` in `trg_run_finish`? | `NOW()` is frozen at the start of the transaction, so a run would show a duration of 0. |
 | Why `DISTINCT ON` in WDH? | Every duty in an overworked week has a high rolling total. One week should be one violation, not one per duty. |
+| Why do some times say IST? | Flights and duties are in UTC, as airlines do. Logins, runs and reviews happen on the users' clock, so they are shown in IST and labelled. |
 | Why compute RST and WDH over all duties, not just the period? | The previous duty or the window can begin before the period starts. |
