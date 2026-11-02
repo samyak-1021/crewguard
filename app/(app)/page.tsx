@@ -2,12 +2,13 @@ import Link from "next/link";
 import { Badge, Card, certTone, PageHeader, Stat, Table, Td } from "@/components/ui";
 import { fmtDate, fmtHours, fmtRole } from "@/lib/format";
 import { getCertAlerts, getDutiesPerDay, getStats, getWorkload } from "@/lib/repo/overview";
+import { countOpenViolations } from "@/lib/repo/violations";
 
 export const metadata = { title: "Overview" };
 
 export default async function OverviewPage() {
-  const [stats, alerts, workload, perDay] = await Promise.all([
-    getStats(), getCertAlerts(), getWorkload(), getDutiesPerDay(),
+  const [stats, alerts, workload, perDay, openViolations] = await Promise.all([
+    getStats(), getCertAlerts(), getWorkload(), getDutiesPerDay(), countOpenViolations(),
   ]);
   const maxHours = Math.max(1, ...workload.map((w) => w.total_duty_hours));
   const maxDay = Math.max(1, ...perDay.map((d) => d.duties));
@@ -19,11 +20,14 @@ export default async function OverviewPage() {
         subtitle={`Roster period ${fmtDate(stats.period_start)} – ${fmtDate(stats.period_end)} · all times UTC`}
       />
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
         <Stat label="Active crew" value={stats.active_crew} />
         <Stat label="Flights" value={stats.flights} />
         <Stat label="Duties rostered" value={stats.duties} />
         <Stat label="Duty hours" value={Math.round(stats.duty_hours)} hint="across the whole roster" />
+        <Link href="/violations?status=OPEN" className="block transition hover:opacity-70">
+          <Stat label="Open violations" value={openViolations} hint="waiting for review" />
+        </Link>
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
