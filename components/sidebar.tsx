@@ -14,6 +14,21 @@ const NAV = [
       { href: "/reference", label: "Airports & fleet" },
     ],
   },
+  {
+    section: "Compliance",
+    items: [
+      { href: "/runs", label: "Validation runs" },
+      { href: "/violations", label: "Violations" },
+      { href: "/rules", label: "Rules" },
+    ],
+  },
+  {
+    section: "Analytics",
+    items: [
+      { href: "/dashboard", label: "Dashboard" },
+      { href: "/activity", label: "Activity log" },
+    ],
+  },
 ];
 
 export function Sidebar({ session }: { session: Session }) {
