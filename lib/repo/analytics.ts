@@ -92,6 +92,12 @@ export async function listAudit(f: AuditFilters): Promise<AuditEntry[] | null> {
   }
 }
 
+// Choices for the activity log's user filter.
+export async function listUsernames() {
+  const rows = await query<{ username: string }>("SELECT username FROM app_user ORDER BY username");
+  return rows.map((r) => r.username);
+}
+
 // The same count per rule, computed in SQL on the source of truth.
 export function getViolationsByRuleSql() {
   return query<{ rule_code: string; rule_name: string; violations: number; open: number }>(`

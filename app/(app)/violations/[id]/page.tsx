@@ -75,7 +75,7 @@ export default async function ViolationDetailPage({ params }: PageProps<"/violat
         </Card>
       </div>
 
-      <Card title={`Contributing duties · ${duties.length}`} className="mt-6">
+      <Card title={`Contributing duties · ${duties.length}`} className="mt-6 overflow-hidden">
         <Table head={["Flight", "Sector", "Aircraft", "Duty start", "Duty end", "Hours"]} empty={duties.length === 0}>
           {duties.map((d) => (
             <tr key={d.assignment_id}>
