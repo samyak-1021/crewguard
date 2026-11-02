@@ -3,7 +3,7 @@
 -- The important queries the application runs, collected in one place so
 -- they can be run in psql for the report and the demo:
 --   psql -d crewguard -f db/queries.sql
--- (Not part of db:reset. Every statement here is read-only.)
+-- (Not part of db:reset. Nothing here changes the data: writes run inside BEGIN ... ROLLBACK.)
 -- =====================================================================
 
 -- the roster is stored and shown in UTC, same as the app's connection
@@ -105,4 +105,63 @@ ORDER BY departures + arrivals DESC;
 SET enable_seqscan = off;
 EXPLAIN ANALYZE
 SELECT * FROM duty_assignment WHERE crew_id = 1 ORDER BY duty_start_utc;
+RESET enable_seqscan;
+
+-- ---------------------------------------------------------------------
+-- PART 2 : COMPLIANCE
+-- ---------------------------------------------------------------------
+
+-- Q13 Stored procedure: run the validator. BEGIN ... ROLLBACK runs it for real
+-- and then undoes everything, so the data stays clean. Q14 to Q16 read this run.
+BEGIN;
+CALL sp_run_validation(2, '2026-11-02', '2026-11-15', NULL);
+
+-- Q14 The explanation: which duties caused each violation
+-- (violation -> violation_assignment -> v_duty_roster, the M:N bridge)
+SELECT v.violation_id, v.rule_code, cm.first_name || ' ' || cm.last_name AS crew_name,
+       r.flight_number, r.duty_start_utc, r.duty_end_utc, va.contribution_value AS hours
+FROM violation v
+JOIN crew_member          cm ON cm.crew_id       = v.crew_id
+JOIN violation_assignment va ON va.violation_id  = v.violation_id
+JOIN v_duty_roster        r  ON r.assignment_id  = va.assignment_id
+ORDER BY v.violation_id, r.duty_start_utc;
+
+-- Q15 GROUP BY: violations per rule and severity (dashboard, SQL panel)
+SELECT rule_code, severity, COUNT(*) AS violations
+FROM violation
+GROUP BY rule_code, severity
+ORDER BY violations DESC;
+
+-- Q16 GROUP BY + HAVING: crew with more than one violation
+SELECT crew_name, COUNT(*) AS violations, STRING_AGG(DISTINCT rule_code, ', ') AS rules
+FROM v_violation_report
+GROUP BY crew_id, crew_name
+HAVING COUNT(*) > 1
+ORDER BY violations DESC, crew_name;
+
+-- Q17 The review workflow: the trigger stamps reviewed_at, the CHECK needs a note
+UPDATE violation
+SET review_status = 'RESOLVED', review_note = 'Crew swapped on the roster', reviewed_by = 2
+WHERE violation_id = (SELECT MIN(violation_id) FROM violation)
+RETURNING violation_id, review_status, reviewed_at;
+
+ROLLBACK;
+
+-- Q18 Full-text search: ranked rule search with a highlighted snippet (rules page)
+SELECT rule_code, rule_name,
+       ts_rank(to_tsvector('english', rule_name || ' ' || description || ' ' || COALESCE(regulation_ref, '')),
+               websearch_to_tsquery('english', 'rest period')) AS rank,
+       ts_headline('english', description, websearch_to_tsquery('english', 'rest period')) AS snippet
+FROM rule_definition
+WHERE to_tsvector('english', rule_name || ' ' || description || ' ' || COALESCE(regulation_ref, ''))
+      @@ websearch_to_tsquery('english', 'rest period')
+ORDER BY rank DESC;
+
+-- Q19 Index use: the same search through the GIN index idx_rule_fts
+-- (four rows are too few for the planner to choose it on its own)
+SET enable_seqscan = off;
+EXPLAIN ANALYZE
+SELECT rule_code FROM rule_definition
+WHERE to_tsvector('english', rule_name || ' ' || description || ' ' || COALESCE(regulation_ref, ''))
+      @@ websearch_to_tsquery('english', 'rest');
 RESET enable_seqscan;
