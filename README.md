@@ -62,7 +62,7 @@ write goes through a route handler in `app/api/*`, which checks the user's role 
 | `SCHEDULER` | manage crew, ratings, flights and duty assignments |
 | `AUDITOR` | read the roster, run validations, review violations |
 
-Demo accounts (password `Crew@123`): `sched_anita`, `sched_vikram` (schedulers), `audit_meera`, `audit_rahul` (auditors).
+Demo accounts: `sched_sam` / `Sam@123` (scheduler) and `audit_shriram` / `Shriram@123` (auditor).
 
 ## Setup
 
