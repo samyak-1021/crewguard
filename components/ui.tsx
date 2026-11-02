@@ -97,6 +97,18 @@ export function Td({ children, className = "" }: { children: ReactNode; classNam
   return <td className={`whitespace-nowrap px-5 py-3 ${className}`}>{children}</td>;
 }
 
+// Search / filter bar: a plain GET form, so filters live in the URL
+// (?q=...&role=...) and the server page reads them as searchParams.
+export function FilterBar({ children, resetHref }: { children: ReactNode; resetHref: string }) {
+  return (
+    <form method="get" className="mb-4 flex flex-wrap items-center gap-2">
+      {children}
+      <button className="rounded-full bg-ink px-4 py-2 text-sm font-medium text-white hover:bg-black">Apply</button>
+      <Link href={resetHref} className="px-2 text-sm text-muted hover:text-ink">Reset</Link>
+    </form>
+  );
+}
+
 // Label + value pair used on detail pages
 export function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
