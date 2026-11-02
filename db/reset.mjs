@@ -5,6 +5,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { MongoClient } from "mongodb";
 import pg from "pg";
 
 const url = process.env.DATABASE_URL;
@@ -42,4 +43,21 @@ try {
   process.exitCode = 1;
 } finally {
   await client.end();
+}
+
+// 3. empty the MongoDB collections too. Violation ids restart at 1, so old evidence
+// would otherwise describe the wrong violations. PostgreSQL is the source of truth,
+// so a reset still succeeds if MongoDB is not running.
+if (process.env.MONGODB_URI) {
+  const mongo = new MongoClient(process.env.MONGODB_URI, { serverSelectionTimeoutMS: 2000 });
+  try {
+    const db = mongo.db(process.env.MONGODB_DB);
+    await db.collection("violation_evidence").deleteMany({});
+    await db.collection("audit_log").deleteMany({});
+    console.log("cleared mongodb collections");
+  } catch (err) {
+    console.warn(`mongodb not cleared: ${err.message}`);
+  } finally {
+    await mongo.close();
+  }
 }

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { logAudit } from "@/lib/audit";
 import { checkLogin } from "@/lib/auth";
 import { badRequest, handle, readJson } from "@/lib/api";
 import { SESSION_COOKIE, SESSION_HOURS, signSession } from "@/lib/session";
@@ -15,6 +16,7 @@ export const POST = handle(async (req) => {
     // cannot find out which usernames exist
     return NextResponse.json({ error: "Incorrect username or password." }, { status: 401 });
   }
+  await logAudit(session, "LOGIN", { type: "user", id: session.userId });
   const res = NextResponse.json({ username: session.username, role: session.role });
   res.cookies.set(SESSION_COOKIE, await signSession(session), {
     httpOnly: true, // page JavaScript cannot read the cookie
