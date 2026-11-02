@@ -5,7 +5,7 @@ import { EvidencePanel } from "@/components/evidence";
 import { ApiForm, Label } from "@/components/forms";
 import { Badge, Card, Field, PageHeader, Table, Td } from "@/components/ui";
 import { requireSession } from "@/lib/auth";
-import { fmtDateTime, fmtRole } from "@/lib/format";
+import { fmtDateTime, fmtEventTime, fmtRole } from "@/lib/format";
 import { toId } from "@/lib/ids";
 import { getEvidence } from "@/lib/repo/evidence";
 import { getViolation, getViolationDuties } from "@/lib/repo/violations";
@@ -111,7 +111,7 @@ export default async function ViolationDetailPage({ params }: PageProps<"/violat
           <dl className="grid grid-cols-2 gap-4 md:grid-cols-3">
             <Field label="Status"><Badge tone={reviewTone(v.review_status)}>{v.review_status.toLowerCase()}</Badge></Field>
             <Field label="Reviewed by">{v.reviewer ?? "—"}</Field>
-            <Field label="Status changed">{fmtDateTime(v.reviewed_at)}</Field>
+            <Field label="Status changed">{fmtEventTime(v.reviewed_at)}</Field>
           </dl>
           {v.review_note && <p className="mt-4 text-sm leading-relaxed">{v.review_note}</p>}
 

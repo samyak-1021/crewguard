@@ -3,7 +3,7 @@ import { runTone } from "@/components/compliance";
 import { ApiForm, Label } from "@/components/forms";
 import { Badge, Card, PageHeader, Table, Td } from "@/components/ui";
 import { requireSession } from "@/lib/auth";
-import { fmtDate, fmtDateTime } from "@/lib/format";
+import { fmtDate, fmtEventTime } from "@/lib/format";
 import { listRuns } from "@/lib/repo/runs";
 
 export const metadata = { title: "Validation runs" };
@@ -38,7 +38,7 @@ export default async function RunsPage() {
               <Td><Link href={`/runs/${r.run_id}`} className="font-medium text-accent hover:underline">#{r.run_id}</Link></Td>
               <Td>{fmtDate(r.period_start)} – {fmtDate(r.period_end)}</Td>
               <Td>{r.triggered_by_name ?? "—"}</Td>
-              <Td>{fmtDateTime(r.started_at)}</Td>
+              <Td>{fmtEventTime(r.started_at)}</Td>
               <Td className="text-muted">{r.duration_ms == null ? "—" : `${r.duration_ms} ms`}</Td>
               <Td><Badge tone={runTone(r.status)}>{r.status.toLowerCase()}</Badge></Td>
               <Td>{r.violations_found}</Td>

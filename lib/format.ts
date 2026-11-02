@@ -8,6 +8,13 @@ const timeOnly = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-
 export const fmtDateTime = (d: Date | string | null) => (d ? dateTime.format(new Date(d)) : "—");
 export const fmtDate = (d: Date | string | null) => (d ? dateOnly.format(new Date(d)) : "—");
 export const fmtTime = (d: Date | string | null) => (d ? timeOnly.format(new Date(d)) : "—");
+// Real-world events (logins, validation runs, reviews) happen on the users' clock,
+// so they are shown in India time and labelled, unlike the UTC roster.
+const eventTime = new Intl.DateTimeFormat("en-GB", {
+  day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Asia/Kolkata",
+});
+export const fmtEventTime = (d: Date | string | null) => (d ? `${eventTime.format(new Date(d))} IST` : "—");
+
 export const fmtHours = (h: number | null) => (h == null ? "—" : `${h.toFixed(1)} h`);
 
 // "CABIN_CREW" -> "Cabin crew"
