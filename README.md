@@ -54,7 +54,6 @@ write goes through a route handler in `app/api/*`, which checks the user's role 
 | `db/queries.sql` | the important queries, runnable in psql |
 | `db/reset.mjs` | rebuilds the database from the numbered files |
 
-The full plan and guideline checklist are in [`docs/PLAN.md`](docs/PLAN.md).
 
 ## Roles
 
