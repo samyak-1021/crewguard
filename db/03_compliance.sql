@@ -307,3 +307,11 @@ BEGIN
     UPDATE validation_run SET status = 'COMPLETED' WHERE run_id = p_run_id;
 END;
 $$;
+
+-- ---------------------------------------------------------------------
+-- FULL-TEXT SEARCH on the rule catalogue.
+-- GIN maps each word to the rows containing it, like the index of a book.
+-- The search query must use exactly this expression or the index is ignored.
+-- ---------------------------------------------------------------------
+CREATE INDEX idx_rule_fts ON rule_definition
+    USING GIN (to_tsvector('english', rule_name || ' ' || description || ' ' || COALESCE(regulation_ref, '')));
