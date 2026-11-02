@@ -14,11 +14,11 @@ export default async function ActivityPage({ searchParams }: PageProps<"/activit
       <PageHeader title="Activity log" subtitle="Newest 100 actions · from the MongoDB audit_log collection" />
 
       <FilterBar resetHref="/activity">
-        <select name="action" defaultValue={sp.action ?? ""} className="field w-auto">
+        <select name="action" defaultValue={sp.action ?? ""} className="field max-w-56">
           <option value="">All actions</option>
           {AUDIT_ACTIONS.map((a) => <option key={a} value={a}>{a}</option>)}
         </select>
-        <select name="username" defaultValue={sp.username ?? ""} className="field w-auto">
+        <select name="username" defaultValue={sp.username ?? ""} className="field max-w-48">
           <option value="">All users</option>
           {usernames.map((u) => <option key={u} value={u}>{u}</option>)}
         </select>

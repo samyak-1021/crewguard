@@ -32,7 +32,7 @@ export function ViolationsTable({ rows }: { rows: ViolationRow[] }) {
               {v.violation_id}
             </Link>
           </Td>
-          <Td><span className="font-medium">{v.rule_code}</span> <span className="text-muted">{v.rule_name}</span></Td>
+          <Td><span className="font-medium" title={v.rule_name}>{v.rule_code}</span></Td>
           <Td>
             <Link href={`/crew/${v.crew_id}`} className="font-medium hover:text-accent">{v.crew_name}</Link>
             <span className="ml-2 text-muted">{v.employee_code}</span>
