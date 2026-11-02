@@ -27,8 +27,8 @@ Sign in as `sched_sam` / `Sam@123`.
 
 | Do this | Rejected by | What to say |
 |---|---|---|
-| Flights, New flight: same airport for From and To | `chk_flight_distinct_endpoints` | The error comes from PostgreSQL. The page shows the constraint name. |
-| Crew, New crew member: hire date in the future | `chk_crew_hire_date` | Validation lives in the database, so no client can skip it. |
+| Flights, Schedule flight: same airport for From and To | `chk_flight_distinct_endpoints` | The error comes from PostgreSQL. The page shows the constraint name. |
+| Crew, Add crew member: hire date in the future | `chk_crew_hire_date` | Validation lives in the database, so no client can skip it. |
 
 ## 3. A transaction rolls back (1 min)
 
