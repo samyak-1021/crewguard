@@ -124,17 +124,20 @@ FROM violation v
 JOIN crew_member          cm ON cm.crew_id       = v.crew_id
 JOIN violation_assignment va ON va.violation_id  = v.violation_id
 JOIN v_duty_roster        r  ON r.assignment_id  = va.assignment_id
+WHERE v.run_id = (SELECT MAX(run_id) FROM validation_run)
 ORDER BY v.violation_id, r.duty_start_utc;
 
 -- Q15 GROUP BY: violations per rule and severity (dashboard, SQL panel)
 SELECT rule_code, severity, COUNT(*) AS violations
 FROM violation
+WHERE run_id = (SELECT MAX(run_id) FROM validation_run)
 GROUP BY rule_code, severity
 ORDER BY violations DESC;
 
 -- Q16 GROUP BY + HAVING: crew with more than one violation
 SELECT crew_name, COUNT(*) AS violations, STRING_AGG(DISTINCT rule_code, ', ') AS rules
 FROM v_violation_report
+WHERE run_id = (SELECT MAX(run_id) FROM validation_run)
 GROUP BY crew_id, crew_name
 HAVING COUNT(*) > 1
 ORDER BY violations DESC, crew_name;
@@ -142,7 +145,7 @@ ORDER BY violations DESC, crew_name;
 -- Q17 The review workflow: the trigger stamps reviewed_at, the CHECK needs a note
 UPDATE violation
 SET review_status = 'RESOLVED', review_note = 'Crew swapped on the roster', reviewed_by = 2
-WHERE violation_id = (SELECT MIN(violation_id) FROM violation)
+WHERE violation_id = (SELECT MIN(violation_id) FROM violation WHERE run_id = (SELECT MAX(run_id) FROM validation_run))
 RETURNING violation_id, review_status, reviewed_at;
 
 ROLLBACK;
