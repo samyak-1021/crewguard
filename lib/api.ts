@@ -36,7 +36,9 @@ const INTEGRITY_CODES = new Set([
   "22008", // datetime_field_overflow
 ]);
 
-type PgError = { code?: string; constraint?: string; message: string };
+// `subject` is set by our own code to say which row failed (e.g. one crew
+// member inside a multi-row transaction).
+type PgError = { code?: string; constraint?: string; column?: string; message: string; subject?: string };
 
 export function badRequest(message: string) {
   return NextResponse.json({ error: message }, { status: 400 });
@@ -54,7 +56,11 @@ export function handle<C>(fn: (req: Request, ctx: C) => Promise<Response>) {
       }
       const pgErr = err as PgError;
       if (pgErr.code && INTEGRITY_CODES.has(pgErr.code)) {
-        const message = (pgErr.constraint && CONSTRAINT_MESSAGES[pgErr.constraint]) || pgErr.message;
+        let message =
+          pgErr.code === "23502"
+            ? `Please fill in ${pgErr.column?.replaceAll("_", " ")}.`
+            : (pgErr.constraint && CONSTRAINT_MESSAGES[pgErr.constraint]) || pgErr.message;
+        if (pgErr.subject) message = `${pgErr.subject}: ${message}`;
         return NextResponse.json({ error: message, constraint: pgErr.constraint ?? null }, { status: 400 });
       }
       console.error(err);
