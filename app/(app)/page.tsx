@@ -22,21 +22,21 @@ export default async function OverviewPage() {
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
         <Stat label="Active crew" value={stats.active_crew} />
-        <Stat label="Flights" value={stats.flights} />
-        <Stat label="Duties rostered" value={stats.duties} />
-        <Stat label="Duty hours" value={Math.round(stats.duty_hours)} hint="across the whole roster" />
+        <Stat label="Flights" value={stats.flights} tone="violet" />
+        <Stat label="Duties rostered" value={stats.duties} tone="amber" />
+        <Stat label="Duty hours" value={Math.round(stats.duty_hours)} hint="across the whole roster" tone="green" />
         <Link href="/violations?status=OPEN" className="block transition hover:opacity-70">
-          <Stat label="Open violations" value={openViolations} hint="waiting for review" />
+          <Stat label="Open violations" value={openViolations} hint="waiting for review" tone="red" />
         </Link>
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         <Card title="Duties per day">
-          <div className="flex h-48 items-end gap-1.5 px-5 pb-4 pt-6">
+          <div className="flex h-[286px] items-end gap-1.5 px-5 pb-4 pt-6">
             {perDay.map((d) => (
               <div key={String(d.day)} className="flex flex-1 flex-col items-center gap-1.5">
                 <span className="text-[10px] text-muted">{d.duties}</span>
-                <div className="w-full rounded-md bg-accent/80" style={{ height: `${(d.duties / maxDay) * 120}px` }} />
+                <div className="w-full rounded-t-md bg-gradient-to-t from-blue-600 to-violet-500" style={{ height: `${(d.duties / maxDay) * 200}px` }} />
                 <span className="text-[10px] text-muted">{new Date(d.day).getUTCDate()}</span>
               </div>
             ))}
@@ -53,8 +53,8 @@ export default async function OverviewPage() {
                   </span>
                   <span className="text-muted">{fmtHours(w.total_duty_hours)} · {w.duty_count} duties</span>
                 </div>
-                <div className="mt-1.5 h-1.5 rounded-full bg-zinc-100">
-                  <div className="h-1.5 rounded-full bg-accent" style={{ width: `${(w.total_duty_hours / maxHours) * 100}%` }} />
+                <div className="mt-1.5 h-1.5 rounded-full bg-slate-100">
+                  <div className="h-1.5 rounded-full bg-violet-500" style={{ width: `${(w.total_duty_hours / maxHours) * 100}%` }} />
                 </div>
               </Link>
             ))}

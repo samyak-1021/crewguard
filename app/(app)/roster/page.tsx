@@ -31,7 +31,7 @@ export default async function RosterPage({ searchParams }: PageProps<"/roster">)
       <Card>
         <Table head={["Duty start", "Duty end", "Crew member", "Role", "Flight", "Sector", "Aircraft", "Hours"]} empty={rows.length === 0}>
           {rows.map((r) => (
-            <tr key={r.assignment_id} className="hover:bg-zinc-50">
+            <tr key={r.assignment_id}>
               <Td>{fmtDateTime(r.duty_start_utc)}</Td>
               <Td className="text-muted">{fmtDateTime(r.duty_end_utc)}</Td>
               <Td><Link href={`/crew/${r.crew_id}`} className="font-medium hover:text-accent">{r.crew_name}</Link></Td>

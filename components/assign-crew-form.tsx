@@ -55,7 +55,7 @@ export function AssignCrewForm({ flightId, typeCode, candidates, defaultStart, d
             <div className="space-y-1">
               {g.crew.length === 0 && <p className="text-sm text-muted">None available</p>}
               {g.crew.map((c) => (
-                <label key={c.crew_id} className="flex cursor-pointer items-start gap-2 rounded-lg px-2 py-1.5 hover:bg-zinc-50">
+                <label key={c.crew_id} className="flex cursor-pointer items-start gap-2 rounded-lg px-2 py-1.5 hover:bg-panel">
                   <input
                     type="checkbox"
                     checked={selected.includes(c.crew_id)}
