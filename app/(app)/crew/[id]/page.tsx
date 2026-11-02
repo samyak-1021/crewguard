@@ -37,9 +37,9 @@ export default async function CrewDetailPage({ params }: PageProps<"/crew/[id]">
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <Stat label="Duties" value={crew.duty_count} />
-        <Stat label="Duty hours" value={fmtHours(crew.total_duty_hours)} />
-        <Stat label="Valid ratings" value={isPilot ? crew.valid_certs : "n/a"} />
-        <Stat label="Hired" value={<span className="text-xl">{fmtDate(crew.hire_date)}</span>} />
+        <Stat label="Duty hours" value={fmtHours(crew.total_duty_hours)} tone="violet" />
+        <Stat label="Valid ratings" value={isPilot ? crew.valid_certs : "n/a"} tone="green" />
+        <Stat label="Hired" value={<span className="text-xl">{fmtDate(crew.hire_date)}</span>} tone="amber" />
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-3">
@@ -51,7 +51,7 @@ export default async function CrewDetailPage({ params }: PageProps<"/crew/[id]">
                   <span>Week of {fmtDate(w.week_start)}</span>
                   <span className={w.hours > WEEKLY_LIMIT ? "font-semibold text-red-600" : "text-muted"}>{fmtHours(w.hours)}</span>
                 </div>
-                <div className="relative mt-1.5 h-2 rounded-full bg-zinc-100">
+                <div className="relative mt-1.5 h-2 rounded-full bg-slate-100">
                   <div
                     className={`h-2 rounded-full ${w.hours > WEEKLY_LIMIT ? "bg-red-500" : "bg-accent"}`}
                     style={{ width: `${(w.hours / maxWeek) * 100}%` }}

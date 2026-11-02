@@ -1,13 +1,21 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, sans-serif;
-  --color-canvas: #f5f5f7;
-  --color-ink: #1d1d1f;
-  --color-muted: #6e6e73;
-  --color-line: #e5e5ea;
-  --color-accent: #0071e3;
-  --color-accent-strong: #0060c0;
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --color-canvas: #ffffff;
+  --color-panel: #f8fafc;
+  --color-ink: #0f172a;
+  --color-muted: #64748b;
+  --color-line: #e2e8f0;
+  --color-accent: #2563eb;
+  --color-accent-strong: #1d4ed8;
+  --color-violet: #7c3aed;
+  --color-amber: #d97706;
+}
+
+/* The app is light-only: never let the OS dark mode recolour it. */
+:root {
+  color-scheme: light;
 }
 
 body {
@@ -16,8 +24,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* shared form-control look */
-.field {
-  @apply w-full rounded-xl border border-line bg-white px-3 py-2 text-sm text-ink outline-none transition
-    placeholder:text-muted/70 focus:border-accent focus:ring-4 focus:ring-accent/15;
+/* shared form-control look (in the components layer so utilities like w-auto can override it) */
+@layer components {
+  .field {
+    @apply w-full rounded-lg border border-line bg-white px-3 py-2 text-sm text-ink outline-none transition
+      placeholder:text-muted/70 focus:border-accent focus:ring-4 focus:ring-accent/15;
+  }
 }

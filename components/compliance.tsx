@@ -26,7 +26,7 @@ export function ViolationsTable({ rows }: { rows: ViolationRow[] }) {
       empty={rows.length === 0}
     >
       {rows.map((v) => (
-        <tr key={v.violation_id} className="hover:bg-zinc-50">
+        <tr key={v.violation_id}>
           <Td>
             <Link href={`/violations/${v.violation_id}`} className="font-medium text-accent hover:underline">
               {v.violation_id}
@@ -50,7 +50,9 @@ export function ViolationsTable({ rows }: { rows: ViolationRow[] }) {
 }
 
 // Simple horizontal bars, in the same style as "Busiest crew" on the Overview page.
-export function Bars({ items }: { items: { label: string; value: number; href?: string }[] }) {
+export function Bars({ items, color = "bg-accent" }: {
+  items: { label: string; value: number; href?: string }[]; color?: string;
+}) {
   const max = Math.max(1, ...items.map((i) => i.value));
   if (items.length === 0) return <p className="px-5 py-10 text-center text-sm text-muted">Nothing to show.</p>;
   return (
@@ -62,8 +64,8 @@ export function Bars({ items }: { items: { label: string; value: number; href?: 
               <span className="font-medium">{i.label}</span>
               <span className="text-muted">{i.value}</span>
             </div>
-            <div className="mt-1.5 h-1.5 rounded-full bg-zinc-100">
-              <div className="h-1.5 rounded-full bg-accent" style={{ width: `${(i.value / max) * 100}%` }} />
+            <div className="mt-1.5 h-1.5 rounded-full bg-slate-100">
+              <div className={`h-1.5 rounded-full ${color}`} style={{ width: `${(i.value / max) * 100}%` }} />
             </div>
           </>
         );

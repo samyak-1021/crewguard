@@ -43,9 +43,9 @@ export function Sidebar({ session }: { session: Session }) {
   }
 
   return (
-    <aside className="sticky top-0 flex h-screen w-60 shrink-0 flex-col border-r border-line bg-white/70 px-4 py-6 backdrop-blur-xl">
+    <aside className="sticky top-0 flex h-screen w-60 flex-col px-4 py-6">
       <Link href="/" className="mb-8 flex items-center gap-2.5 px-2">
-        <span className="grid h-8 w-8 place-items-center rounded-xl bg-accent text-sm font-bold text-white">CG</span>
+        <span className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-blue-600 to-violet-600 text-sm font-bold text-white">CG</span>
         <span className="text-[17px] font-semibold tracking-tight">CrewGuard</span>
       </Link>
 
@@ -57,8 +57,10 @@ export function Sidebar({ session }: { session: Session }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`block rounded-lg px-2 py-1.5 text-sm transition ${
-                  isActive(item.href) ? "bg-accent/10 font-medium text-accent" : "text-ink hover:bg-zinc-100"
+                className={`block rounded-lg border-l-[3px] px-2.5 py-1.5 text-sm transition ${
+                  isActive(item.href)
+                    ? "border-accent bg-white font-medium text-accent ring-1 ring-line"
+                    : "border-transparent text-slate-600 hover:bg-white hover:text-ink"
                 }`}
               >
                 {item.label}
@@ -68,10 +70,14 @@ export function Sidebar({ session }: { session: Session }) {
         ))}
       </nav>
 
-      <div className="mt-4 rounded-xl bg-zinc-50 p-3">
+      <div className="mt-4 rounded-lg border border-line bg-white p-3">
         <p className="truncate text-sm font-medium">{session.username}</p>
-        <p className="text-xs text-muted">{session.role === "SCHEDULER" ? "Scheduler" : "Auditor"}</p>
-        <button onClick={signOut} className="mt-2 text-xs font-medium text-accent hover:underline">
+        <span className={`mt-1 inline-block rounded-md px-1.5 py-0.5 text-[11px] font-medium ring-1 ring-inset ${
+          session.role === "SCHEDULER" ? "bg-blue-50 text-blue-700 ring-blue-200" : "bg-violet-50 text-violet-700 ring-violet-200"
+        }`}>
+          {session.role === "SCHEDULER" ? "Scheduler" : "Auditor"}
+        </span>
+        <button onClick={signOut} className="mt-2 block text-xs font-medium text-accent hover:underline">
           Sign out
         </button>
       </div>

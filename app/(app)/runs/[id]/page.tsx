@@ -32,7 +32,10 @@ export default async function RunDetailPage({ params }: PageProps<"/runs/[id]">)
       </Card>
 
       <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        {counts.map((c) => <Stat key={c.rule_code} label={c.rule_code} value={c.violations} hint={c.rule_name} />)}
+        {counts.map((c, i) => (
+          <Stat key={c.rule_code} label={c.rule_code} value={c.violations} hint={c.rule_name}
+                tone={(["blue", "violet", "amber", "green"] as const)[i % 4]} />
+        ))}
       </div>
 
       <Card title="Violations" className="mt-6">

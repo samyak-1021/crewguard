@@ -34,7 +34,7 @@ export default async function RunsPage() {
           empty={runs.length === 0}
         >
           {runs.map((r) => (
-            <tr key={r.run_id} className="hover:bg-zinc-50">
+            <tr key={r.run_id}>
               <Td><Link href={`/runs/${r.run_id}`} className="font-medium text-accent hover:underline">#{r.run_id}</Link></Td>
               <Td>{fmtDate(r.period_start)} – {fmtDate(r.period_end)}</Td>
               <Td>{r.triggered_by_name ?? "—"}</Td>
