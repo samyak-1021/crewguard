@@ -56,13 +56,13 @@ workflow (`review_status`, `reviewed_by`, `review_note`, `reviewed_at`).
 | CREATE / ALTER / DROP | `db/01_schema.sql` (DROP … IF EXISTS reset, CREATE TABLE, ALTER TABLE ADD CONSTRAINT), `db/03_compliance.sql` (ALTER TABLE ADD COLUMN) |
 | PK / FK / constraints | every table: PK, FK with ON DELETE/UPDATE actions, CHECK, UNIQUE, NOT NULL, EXCLUSION |
 | Indexes | B-tree (FK and lookup columns), GiST (exclusion), GIN (full-text) |
-| Views | `v_duty_roster`, `v_crew_summary`, `v_violation_report` |
+| Views | `v_duty_roster`, `v_crew_summary` (Part 1), `v_violation_report` (Part 2) |
 | INSERT / UPDATE / DELETE / SELECT | the whole app (roster forms, review workflow) plus `db/04_seed.sql` |
 | JOIN / GROUP BY / HAVING / ORDER BY / aggregates / subqueries | repository SQL in `lib/repo/*`, collected in `db/queries.sql` for the report |
 | Transactions | multi-crew assignment (all-or-nothing) and the validation run (BEGIN/COMMIT/ROLLBACK) |
-| Functions | `fn_duty_hours`, `fn_crew_duty_hours`, `fn_crew_roster` (table-valued) |
+| Functions | `fn_duty_hours`, `fn_crew_duty_hours`, `fn_crew_roster` (table-valued), `fn_cert_status` |
 | Stored procedure | `sp_run_validation` (the validator: RST, FDP, WDH, CER) |
-| Triggers | violation-count sync, run finish-stamp, review-timestamp stamp |
+| Triggers | `trg_validate_duty` (Part 1: active crew, role match, duty covers flight); violation-count sync, run finish-stamp, review stamp (Part 2) |
 | Full-text search | GIN index plus `to_tsvector` / `ts_rank` on the rule catalogue |
 | NoSQL aggregation | MongoDB `$group` / `$match` pipelines on the dashboard |
 | Auth plus 2 roles | SCHEDULER (manages the roster), AUDITOR (runs validations, reviews violations) |
@@ -103,7 +103,7 @@ Browser ──► Next.js server ──┬─► lib/repo/*.ts (SQL, node-postgr
 
 | | Samyak — Part 1: Roster & Platform | Shriram — Part 2: Compliance & Analytics |
 |---|---|---|
-| PostgreSQL | full schema (11 tables, all constraints), indexes, seed data, views `v_duty_roster` + `v_crew_summary`, functions, multi-assign transaction | `sp_run_validation` (4 rules), `v_violation_report`, 3 triggers, ALTER review columns, full-text search |
+| PostgreSQL | full schema (11 tables, all constraints), indexes, seed data, views `v_duty_roster` + `v_crew_summary`, 4 functions, duty-validation trigger, multi-assign transaction | `sp_run_validation` (4 rules), `v_violation_report`, 3 triggers, ALTER review columns, full-text search |
 | MongoDB | — | both collections, indexes, aggregation pipelines |
 | App | scaffold, env, DB pool, auth + roles, UI kit, Overview, Crew, Flights, Duties, Reference | Runs, Violations (+ review), Rules search, Dashboard, Activity log |
 | Quality | DB constraint tests, README | compliance tests, final documentation report, ER fix, demo script |
@@ -111,11 +111,10 @@ Browser ──► Next.js server ──┬─► lib/repo/*.ts (SQL, node-postgr
 ## 7. Repo layout
 
 ```
-db/            01_schema.sql 02_roster_objects.sql 03_compliance.sql 04_seed.sql queries.sql
-scripts/       db-reset.mjs (runs db/*.sql in order, cross-platform)
-lib/           db.ts auth.ts pg-errors.ts repo/*.ts (mongo.ts — Part 2)
-app/           (auth)/login  (app)/… pages  api/… route handlers
-components/    ui kit
+db/            01_schema.sql 02_roster.sql 03_compliance.sql 04_seed.sql queries.sql reset.mjs
+lib/           db.ts auth.ts session.ts api.ts format.ts repo/*.ts (mongo.ts — Part 2)
+app/           login/  (app)/… pages  api/… route handlers
+components/    ui kit, forms, sidebar
 tests/         *.test.mjs (node:test, each test inside BEGIN … ROLLBACK)
 docs/          PLAN.md HANDOFF_SHRIRAM.md previous-submissions/
 ```
