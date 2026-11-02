@@ -22,6 +22,9 @@ const CONSTRAINT_MESSAGES: Record<string, string> = {
   uk_duty_crew_flight: "This crew member is already on this flight.",
   chk_duty_time_order: "Duty must end after it starts.",
   excl_duty_no_overlap: "This duty overlaps another duty of the same crew member.",
+  chk_run_period_order: "The end date cannot be before the start date.",
+  chk_violation_review_status: "Unknown review status.",
+  chk_violation_resolution_note: "Add a note saying how this violation was resolved.",
 };
 
 // PostgreSQL error codes (SQLSTATE) that mean "your data broke a rule".
