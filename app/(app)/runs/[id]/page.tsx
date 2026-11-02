@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { runTone, ViolationsTable } from "@/components/compliance";
 import { Badge, Card, Field, PageHeader, Stat } from "@/components/ui";
-import { fmtDate, fmtDateTime } from "@/lib/format";
+import { fmtDate, fmtEventTime } from "@/lib/format";
 import { toId } from "@/lib/ids";
 import { getRun, getRunRuleCounts } from "@/lib/repo/runs";
 import { listViolations } from "@/lib/repo/violations";
@@ -26,7 +26,7 @@ export default async function RunDetailPage({ params }: PageProps<"/runs/[id]">)
         <dl className="grid grid-cols-2 gap-4 md:grid-cols-4">
           <Field label="Status"><Badge tone={runTone(run.status)}>{run.status.toLowerCase()}</Badge></Field>
           <Field label="Triggered by">{run.triggered_by_name ?? "—"}</Field>
-          <Field label="Started">{fmtDateTime(run.started_at)}</Field>
+          <Field label="Started">{fmtEventTime(run.started_at)}</Field>
           <Field label="Duration">{run.duration_ms == null ? "—" : `${run.duration_ms} ms`}</Field>
         </dl>
       </Card>

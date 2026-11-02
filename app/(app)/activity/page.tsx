@@ -1,6 +1,6 @@
 import { Badge, Card, FilterBar, PageHeader, Table, Td } from "@/components/ui";
 import { AUDIT_ACTIONS } from "@/lib/audit";
-import { fmtDateTime, fmtRole } from "@/lib/format";
+import { fmtEventTime, fmtRole } from "@/lib/format";
 import { listAudit, listUsernames } from "@/lib/repo/analytics";
 
 export const metadata = { title: "Activity log" };
@@ -29,7 +29,7 @@ export default async function ActivityPage({ searchParams }: PageProps<"/activit
           <Table head={["Time", "User", "Action", "Entity", "Details"]} empty={entries.length === 0}>
             {entries.map((e) => (
               <tr key={String(e._id)}>
-                <Td>{fmtDateTime(e.ts)}</Td>
+                <Td>{fmtEventTime(e.ts)}</Td>
                 <Td>{e.user.username} <span className="text-muted">· {fmtRole(e.user.role)}</span></Td>
                 <Td><Badge tone="blue">{e.action}</Badge></Td>
                 <Td>{e.entity.type} #{e.entity.id}</Td>
