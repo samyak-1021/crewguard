@@ -41,3 +41,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# internal notes (kept out of the repo)
+*HANDOFF*.md
+PLAN.md
