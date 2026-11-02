@@ -4,9 +4,9 @@ import type { ReactNode } from "react";
 
 export function PageHeader({ title, subtitle, action }: { title: string; subtitle?: ReactNode; action?: ReactNode }) {
   return (
-    <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+    <div className="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-line pb-5">
       <div>
-        <h1 className="text-3xl font-semibold tracking-tight">{title}</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
         {subtitle && <p className="mt-1 text-sm text-muted">{subtitle}</p>}
       </div>
       {action}
@@ -18,10 +18,10 @@ export function Card({ title, action, children, className = "" }: {
   title?: string; action?: ReactNode; children: ReactNode; className?: string;
 }) {
   return (
-    <section className={`rounded-2xl bg-white shadow-sm ring-1 ring-black/5 ${className}`}>
+    <section className={`overflow-hidden rounded-xl border border-line bg-white ${className}`}>
       {title && (
-        <div className="flex items-center justify-between border-b border-line px-5 py-3.5">
-          <h2 className="text-[15px] font-semibold">{title}</h2>
+        <div className="flex items-center justify-between border-b border-line bg-panel px-5 py-3">
+          <h2 className="text-sm font-semibold">{title}</h2>
           {action}
         </div>
       )}
@@ -30,10 +30,20 @@ export function Card({ title, action, children, className = "" }: {
   );
 }
 
-export function Stat({ label, value, hint }: { label: string; value: ReactNode; hint?: string }) {
+// Colour per stat tile: a top stripe plus a tinted label.
+const STAT_TONES = {
+  blue: "border-t-blue-600 [&_.stat-label]:text-blue-700",
+  violet: "border-t-violet-600 [&_.stat-label]:text-violet-700",
+  amber: "border-t-amber-500 [&_.stat-label]:text-amber-700",
+  green: "border-t-emerald-600 [&_.stat-label]:text-emerald-700",
+} as const;
+
+export function Stat({ label, value, hint, tone = "blue" }: {
+  label: string; value: ReactNode; hint?: string; tone?: keyof typeof STAT_TONES;
+}) {
   return (
-    <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-black/5">
-      <p className="text-xs font-medium uppercase tracking-wide text-muted">{label}</p>
+    <div className={`rounded-xl border border-line border-t-4 bg-white p-5 ${STAT_TONES[tone]}`}>
+      <p className="stat-label text-xs font-semibold uppercase tracking-wide">{label}</p>
       <p className="mt-2 text-3xl font-semibold tracking-tight">{value}</p>
       {hint && <p className="mt-1 text-xs text-muted">{hint}</p>}
     </div>
@@ -41,18 +51,18 @@ export function Stat({ label, value, hint }: { label: string; value: ReactNode; 
 }
 
 const BADGE_TONES = {
-  gray: "bg-zinc-100 text-zinc-700",
-  blue: "bg-blue-50 text-blue-700",
-  green: "bg-emerald-50 text-emerald-700",
-  amber: "bg-amber-50 text-amber-700",
-  red: "bg-red-50 text-red-700",
+  gray: "bg-slate-50 text-slate-700 ring-slate-200",
+  blue: "bg-blue-50 text-blue-700 ring-blue-200",
+  green: "bg-emerald-50 text-emerald-700 ring-emerald-200",
+  amber: "bg-amber-50 text-amber-700 ring-amber-200",
+  red: "bg-red-50 text-red-700 ring-red-200",
 } as const;
 
 export type Tone = keyof typeof BADGE_TONES;
 
 export function Badge({ tone = "gray", children }: { tone?: Tone; children: ReactNode }) {
   return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${BADGE_TONES[tone]}`}>
+    <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset ${BADGE_TONES[tone]}`}>
       {children}
     </span>
   );
@@ -66,9 +76,9 @@ export function ButtonLink({ href, children, variant = "primary" }: {
 }) {
   const style = variant === "primary"
     ? "bg-accent text-white hover:bg-accent-strong"
-    : "bg-white text-ink ring-1 ring-line hover:bg-zinc-50";
+    : "bg-white text-ink border border-line hover:bg-panel";
   return (
-    <Link href={href} className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition ${style}`}>
+    <Link href={href} className={`inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition ${style}`}>
       {children}
     </Link>
   );
@@ -80,13 +90,13 @@ export function Table({ head, children, empty }: { head: ReactNode[]; children: 
     <div className="overflow-x-auto">
       <table className="w-full text-left text-sm">
         <thead>
-          <tr className="border-b border-line text-xs uppercase tracking-wide text-muted">
+          <tr className="border-b border-line bg-panel/60 text-xs uppercase tracking-wide text-muted">
             {head.map((h, i) => (
               <th key={i} className="whitespace-nowrap px-5 py-3 font-medium">{h}</th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-line">{children}</tbody>
+        <tbody className="divide-y divide-line [&_tr:hover]:bg-blue-50/40">{children}</tbody>
       </table>
       {empty && <p className="px-5 py-10 text-center text-sm text-muted">Nothing to show.</p>}
     </div>
@@ -103,7 +113,7 @@ export function FilterBar({ children, resetHref }: { children: ReactNode; resetH
   return (
     <form method="get" className="mb-4 flex flex-wrap items-center gap-2">
       {children}
-      <button className="rounded-full bg-ink px-4 py-2 text-sm font-medium text-white hover:bg-black">Apply</button>
+      <button className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent-strong">Apply</button>
       <Link href={resetHref} className="px-2 text-sm text-muted hover:text-ink">Reset</Link>
     </form>
   );

@@ -36,7 +36,7 @@ export default async function FlightsPage({ searchParams }: PageProps<"/flights"
       <Card>
         <Table head={["Flight", "Route", "Aircraft", "Departs", "Arrives", "Block", "Crew"]} empty={flights.length === 0}>
           {flights.map((f) => (
-            <tr key={f.flight_id} className="hover:bg-zinc-50">
+            <tr key={f.flight_id}>
               <Td><Link href={`/flights/${f.flight_id}`} className="font-medium hover:text-accent">{f.flight_number}</Link></Td>
               <Td>{f.dep_airport} → {f.arr_airport}</Td>
               <Td>{f.type_code}</Td>

@@ -21,7 +21,7 @@ export async function callApi(url: string, method: string, body?: unknown) {
 export function ErrorNote({ error }: { error: ApiError | null }) {
   if (!error) return null;
   return (
-    <div className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+    <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
       {error.error}
       {error.constraint && (
         <span className="mt-1 block font-mono text-xs text-red-500">rejected by PostgreSQL · {error.constraint}</span>
@@ -35,7 +35,7 @@ export function SubmitButton({ busy, children }: { busy: boolean; children: Reac
     <button
       type="submit"
       disabled={busy}
-      className="rounded-full bg-accent px-5 py-2 text-sm font-medium text-white transition hover:bg-accent-strong disabled:opacity-50"
+      className="rounded-lg bg-accent px-5 py-2 text-sm font-medium text-white transition hover:bg-accent-strong disabled:opacity-50"
     >
       {busy ? "Saving…" : children}
     </button>
@@ -118,7 +118,7 @@ export function DeleteButton({ url, redirectTo, label = "Delete" }: { url: strin
 export function Label({ text, children }: { text: string; children: ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-xs font-medium text-muted">{text}</span>
+      <span className="mb-1.5 block text-xs font-medium text-slate-700">{text}</span>
       {children}
     </label>
   );

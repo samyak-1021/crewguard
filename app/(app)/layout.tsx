@@ -7,7 +7,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
   return (
     <div className="flex">
       <Sidebar session={session} />
-      <main className="min-w-0 flex-1 px-10 py-10">
+      <main className="min-w-0 flex-1 px-10 py-8">
         <div className="mx-auto max-w-6xl">{children}</div>
       </main>
     </div>

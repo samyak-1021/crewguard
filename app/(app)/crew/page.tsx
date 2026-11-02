@@ -39,7 +39,7 @@ export default async function CrewPage({ searchParams }: PageProps<"/crew">) {
       <Card>
         <Table head={["Crew member", "Role", "Base", "Duties", "Duty hours", "Valid ratings", "Last duty ends"]} empty={crew.length === 0}>
           {crew.map((c) => (
-            <tr key={c.crew_id} className="hover:bg-zinc-50">
+            <tr key={c.crew_id}>
               <Td>
                 <Link href={`/crew/${c.crew_id}`} className="font-medium hover:text-accent">{c.crew_name}</Link>
                 <span className="ml-2 text-muted">{c.employee_code}</span>
