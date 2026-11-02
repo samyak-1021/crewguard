@@ -105,3 +105,38 @@ CREATE TRIGGER trg_violation_review
 BEFORE UPDATE OF review_status ON violation
 FOR EACH ROW
 EXECUTE FUNCTION trg_fn_violation_review();
+
+-- ---------------------------------------------------------------------
+-- VIEW: one readable row per violation for the app and the report.
+-- LEFT JOIN for the reviewer, because an OPEN violation has none.
+-- duty_count is a correlated sub-query: it runs once per violation.
+-- ---------------------------------------------------------------------
+CREATE OR REPLACE VIEW v_violation_report AS
+SELECT v.violation_id,
+       v.run_id,
+       vr.period_start,
+       vr.period_end,
+       v.rule_code,
+       r.rule_name,
+       v.severity,
+       v.crew_id,
+       cm.employee_code,
+       cm.first_name || ' ' || cm.last_name AS crew_name,
+       cm.crew_role,
+       v.window_start,
+       v.window_end,
+       v.observed_value,
+       v.threshold_value,
+       v.evidence_doc_id,
+       v.review_status,
+       u.username AS reviewer,
+       v.review_note,
+       v.reviewed_at,
+       (SELECT COUNT(*)::int
+        FROM violation_assignment va
+        WHERE va.violation_id = v.violation_id) AS duty_count
+FROM violation v
+JOIN validation_run  vr ON vr.run_id   = v.run_id
+JOIN rule_definition r  ON r.rule_code = v.rule_code
+JOIN crew_member     cm ON cm.crew_id  = v.crew_id
+LEFT JOIN app_user   u  ON u.user_id   = v.reviewed_by;
