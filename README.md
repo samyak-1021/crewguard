@@ -261,17 +261,18 @@ lib/          db.ts (pool, transactions), mongo.ts, audit.ts, auth.ts, session.t
 lib/repo/     all SQL and the MongoDB aggregations
 db/           SQL files, sample data, reset script
 tests/        database, compliance and MongoDB tests
-docs/         report, demo script, diagrams, screenshots, previous review submissions
+docs/         report (Word), demo script, diagrams, screenshots, previous review submissions
 ```
 
 | Document | Contents |
 |---|---|
-| [`docs/CrewGuard_Report.pdf`](docs/CrewGuard_Report.pdf) | The full project report |
+| [`PES2UG24CS436_PES2UG24CS495_DBMSPROJECTREPORT.pdf`](PES2UG24CS436_PES2UG24CS495_DBMSPROJECTREPORT.pdf) | The full project report (PDF) |
+| [`docs/PES2UG24CS436_PES2UG24CS495_DBMSPROJECTREPORT.docx`](docs/PES2UG24CS436_PES2UG24CS495_DBMSPROJECTREPORT.docx) | The full project report (Word) |
 | [`docs/DEMO.md`](docs/DEMO.md) | A 10-minute demo script, with questions to expect |
 
 ## Team
 
-| Member | SRN | Part |
+| Name | SRN | Who did what |
 |---|---|---|
-| Samyak Sanklecha | PES2UG24CS436 | Roster and platform: schema, seed data, roster views, functions and trigger, auth and roles, crew, flights, roster and reference pages, UI theme |
-| Shriram Chandrasekar | PES2UG24CS495 | Compliance and analytics: validator procedure, violations and review, rule search, MongoDB evidence, activity log and dashboard, compliance and MongoDB tests, diagrams, demo script, report |
+| Samyak Sanklecha | PES2UG24CS436 | **Roster and platform:** PostgreSQL schema with 11 tables and all constraints, indexes, roster functions, views and `trg_validate_duty`, seed data, database layer, authentication and roles, crew, flight, roster and reference pages, UI theme, database constraint tests, final report on the university template |
+| Shriram Chandrasekar | PES2UG24CS495 | **Compliance and analytics:** `sp_run_validation`, compliance triggers, `v_violation_report`, violation review, rule full-text search, MongoDB `violation_evidence` and `audit_log`, aggregation pipelines, runs, violations, explanation, rules, dashboard and activity pages, compliance and MongoDB tests, diagrams, demo script, first version of the report |
